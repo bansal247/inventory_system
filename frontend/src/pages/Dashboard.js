@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { api } from "../api";
 import { useToast } from "../components/Toast";
 
@@ -7,11 +7,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const toast = useToast();
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const data = await api.getSummary();
@@ -21,7 +17,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   if (loading) return <div className="page-loading">Loading dashboard…</div>;
   if (!summary) return null;

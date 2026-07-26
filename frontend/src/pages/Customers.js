@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { api } from "../api";
 import { useToast } from "../components/Toast";
 import Modal from "../components/Modal";
@@ -16,11 +16,7 @@ export default function Customers() {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const toast = useToast();
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       setCustomers(await api.getCustomers());
@@ -29,7 +25,11 @@ export default function Customers() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   function openCreate() {
     setForm(emptyForm);
