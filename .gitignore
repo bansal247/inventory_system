@@ -1,1 +1,12 @@
-.env
+*node_modules
+*build
+*.env
+*.env.local
+*npm-debug.log
+*__pycache__
+*.pyc
+*.pyo
+*.venv
+*venv
+*.egg-info
+*.pytest_cache
