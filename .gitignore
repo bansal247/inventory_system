@@ -10,3 +10,5 @@
 *venv
 *.egg-info
 *.pytest_cache
+config.bat
+node_modules
