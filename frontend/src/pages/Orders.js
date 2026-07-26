@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { api } from "../api";
 import { useToast } from "../components/Toast";
 import Modal from "../components/Modal";
@@ -17,14 +17,15 @@ export default function Orders() {
   const [lines, setLines] = useState([{ product_id: "", quantity: 1 }]);
   const [formError, setFormError] = useState("");
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [o, c, p] = await Promise.all([api.getOrders(), api.getCustomers(), api.getProducts()]);
+      const [o, c, p] = await Promise.all([
+        api.getOrders(),
+        api.getCustomers(),
+        api.getProducts(),
+      ]);
+
       setOrders(o);
       setCustomers(c);
       setProducts(p);
@@ -33,7 +34,11 @@ export default function Orders() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   function openCreate() {
     setCustomerId("");
